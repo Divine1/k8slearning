@@ -1,14 +1,14 @@
 ```
-kubectl get hpa -n aspose
-kubectl describe hpa viewgrid -n aspose
-kubectl get pods -n aspose
-kubectl get pods -n aspose -l app=viewgrid -w
+kubectl get hpa -n ns
+kubectl describe hpa vg -n ns
+kubectl get pods -n ns
+kubectl get pods -n ns -l app=vg -w
 
 
-kubectl -n aspose run -i --tty load-generator --image=busybox /bin/sh
+kubectl -n ns run -i --tty load-generator --image=busybox /bin/sh
 while true; do wget -q -O- http://<your-service-name>; done
 
 
-kubectl get hpa viewgrid -n aspose -w
-kubectl get pods -n aspose -l app=viewgrid -w
+kubectl get hpa vg -n ns -w
+kubectl get pods -n ns -l app=vg -w
 ```

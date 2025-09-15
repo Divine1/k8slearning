@@ -11,4 +11,7 @@ while true; do wget -q -O- http://<your-service-name>; done
 
 kubectl get hpa vg -n ns -w
 kubectl get pods -n ns -l app=vg -w
+
+kubectl top pods
+kubectl top nodes
 ```

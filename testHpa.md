@@ -15,3 +15,15 @@ kubectl get pods -n ns -l app=vg -w
 kubectl top pods
 kubectl top nodes
 ```
+
+
+
+```
+apt update
+apt install vim curl
+apt install gnupg software-properties-common
+curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+apt update
+apt install k6
+```

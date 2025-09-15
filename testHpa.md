@@ -29,3 +29,47 @@ echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.i
 apt-get update
 apt-get install k6
 ```
+
+
+
+```
+import http from 'k6/http';
+import { sleep } from 'k6';
+import { check, fail } from 'k6';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
+
+export const options = {
+  vus: 1,
+  iterations: 3,
+  discardResponseBodies: true,
+};
+
+
+const ids = [5,5,5,5,5, 5,5,5,5,5, 5,5,5,5,5]
+export default function () {
+  // Stagger the requests by VU number
+  sleep(__VU * 0.015); // 50ms delay per VU
+  const documentId = documentIds[__VU - 1];
+
+  const startTime = new Date().toISOString();
+  
+  const response = http.get(`https://url`, {timeout: '120s', headers: {'token': 'token'}});
+  const isSuccess = check(response, {
+    'status is 200': (r) => r.status === 200,
+  });
+  // Log failed responses
+  if (!isSuccess) {
+    console.log(`❌ FAILED: Status ${response.status} for URL: ${response.url}`);
+    // console.log(`Response body: ${response.body}`);
+    console.log(`VU: ${__VU}, ITER: ${__ITER}`);
+  }
+  console.log(`VU ${__VU} request sent at ${startTime}`);
+}
+
+export function handleSummary(data) {
+  return {
+    "summary.html": htmlReport(data),
+  };
+}
+
+```
